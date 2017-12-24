@@ -6,7 +6,6 @@ var https = require('https');
 var express = require('express');
 
 var AWS = require('aws-sdk');
-var MarkovChain = require('markovchain');
 var Sentencer = require('sentencer');
 var uuidv1 = require('uuid/v1');
 var captions = require('./middleware/captions');
@@ -14,7 +13,6 @@ var fetch = require('node-fetch');
 
 
 var app = express();
-var sentence = new MarkovChain(fs.readFileSync('./quotes.txt', 'utf8'));
 var port = 3001;
 
 var bodyParser = require('body-parser');
