@@ -1,0 +1,15 @@
+{
+    "dependencies": {
+        "aws-sdk": ">= 2.0.9",
+        "body-parser": "^1.18.2",
+        "express": "^4.16.2",
+        "markovchain": "^1.0.2",
+        "node-fetch": "^1.7.3",
+        "node-uuid": ">= 1.4.1",
+        "sentencer": "^0.1.5",
+        "uuid": "^3.1.0"
+    },
+    "scripts": {
+        "start": "node main.js"
+    }
+}
