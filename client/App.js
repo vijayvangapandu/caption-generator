@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import { Map } from 'immutable';
-import Swiper from 'react-native-swiper';
 import ImagePicker from 'react-native-image-picker';
 import  NavigationView  from './components/NavigationView.js';
 import styles from './styles';
@@ -70,7 +69,7 @@ export default class App extends Component {
             }
         }
     }
-    asyncPurgeStore = async (key) => {
+    asyncPurgeStore = async (key: string) => {
         try {
             await AsyncStorage.removeItem((key, error) => {
                 if (error) {
@@ -126,7 +125,7 @@ export default class App extends Component {
             console.warn('error saving data', error);
         }
     }
-    setSelectedImage(imgData) {
+    setSelectedImage(imgData: string) {
         console.log('pressed', imgData);
     }
     processImagePickerResponse(response) {
@@ -151,17 +150,23 @@ export default class App extends Component {
         }
     }
     loadCameraPhoto() {
-        ImagePicker.launchCamera(this.pickerOptions, (response) => this.processImagePickerResponse(response));
+        ImagePicker.launchCamera(
+            this.pickerOptions, (response) => this.processImagePickerResponse(response)
+        );
     }
     loadLibraryPhoto() {
-        ImagePicker.launchImageLibrary(this.pickerOptions, (response) => this.processImagePickerResponse(response));
+        ImagePicker.launchImageLibrary(
+            this.pickerOptions, (response) => this.processImagePickerResponse(response)
+        );
     }
     showImagePicker() {
-        ImagePicker.showImagePicker(this.pickerOptions, (response) => this.processImagePickerResponse(response));
+        ImagePicker.showImagePicker(
+            this.pickerOptions, (response) => this.processImagePickerResponse(response)
+        );
     }
     processImage() {
         this.setState({appLoading:true});
-        fetch('http://192.168.1.10:3001/api/v1/process', {
+        fetch('http://192.168.0.7:3001/api/v1/process', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -191,7 +196,7 @@ export default class App extends Component {
             captionsLoading: true,
             selectedCaption: index
         });
-        fetch('http://192.168.1.10:3001/api/v1/captions', {
+        fetch('http://192.168.0.7:3001/api/v1/captions', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -325,23 +330,16 @@ export default class App extends Component {
                         {!!this.state.captionsLoading ? (
                             <ActivityIndicator size="small" color="#841584" />
                         ) : (
-                            // <FlatList
-                            //     data={this.state.captions}
-                            //     extraData={this.state}
-                            //     keyExtractor={(item) => item.id}
-                            //     onPressItem={(item) => this._onPressCaptionItem(item.id)}
-                            //     renderItem={({item}) => (
-                            //         <Text
-                            //             onPress={() => this._onPressCaptionItem(item.id)}
-                            //             style={styles.caption}>{item.text}</Text>
-                            // )} />
-                            <Swiper style={styles.swiperView} showsButtons={true}>
-                                {this.state.captions.map((item) => (
-                                    <View style={styles.swiperViewSlide}>
-                                        <Text style={styles.text}>Hello Swiper</Text>
-                                    </View>
-                                ))}
-                            </Swiper>
+                            <FlatList
+                                data={this.state.captions}
+                                extraData={this.state}
+                                keyExtractor={(item) => item.id}
+                                onPressItem={(item) => this._onPressCaptionItem(item.id)}
+                                renderItem={({item}) => (
+                                    <Text
+                                        onPress={() => this._onPressCaptionItem(item.id)}
+                                        style={styles.caption}>{item.text}</Text>
+                            )} />
                         )}
                     </View>}
             </View>

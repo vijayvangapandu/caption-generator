@@ -159,6 +159,7 @@ export default  StyleSheet.create({
     },
     swiperViewSlide: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: 200
     }
 });
