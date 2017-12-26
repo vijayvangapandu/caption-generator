@@ -2,6 +2,7 @@ config.json
 node_modules
 npm-debug.log
 *.zip
+config.js
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

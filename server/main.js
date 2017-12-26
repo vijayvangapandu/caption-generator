@@ -4,6 +4,7 @@ var path = require('path');
 var http = require('http');
 var https = require('https');
 var express = require('express');
+var config = require('./config.js ');
 
 var AWS = require('aws-sdk');
 var Sentencer = require('sentencer');
@@ -27,8 +28,8 @@ app.use(function(req, res, next) {
 var s3 = new AWS.S3();
 var rekognition = new AWS.Rekognition({
     apiVersion: '2016-06-27',
-    accessKeyId: 'AKIAJT2NVYG5TOJM4MHQ',
-    secretAccessKey: '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',
+    accessKeyId: config.accessKey,
+    secretAccessKey: config.secretAccessKey,
     sslEnabled: true,
     region:'us-west-2',
     httpOptions: {
