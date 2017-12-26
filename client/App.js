@@ -4,13 +4,12 @@
  * @flow
  */
 
-import * as React from 'react';
+import React, { Component } from 'react';
 import { Map } from 'immutable';
-const ImagePicker = require('react-native-image-picker');
-const NavigationView = require('./components/NavigationView.js');
-const styles = require('./styles');
+import ImagePicker from 'react-native-image-picker';
+import  NavigationView  from './components/NavigationView.js';
+import styles from './styles';
 import {
-    AppRegistry,
     Platform,
     StyleSheet,
     Text,
@@ -29,12 +28,16 @@ import {
     Modal
 } from 'react-native';
 require('./utils/network-logger.js')();
+// const icon = require('./assets/menu-icon.svg');
 
-export interface App {
-    pickerOptions: object
-}
+const instructions = Platform.select({
+    ios: 'Press Cmd+R to reload,\n' +
+    'Cmd+D or shake for dev menu',
+    android: 'Double tap R on your keyboard to reload,\n' +
+    'Shake or press menu button for dev menu',
+});
 
-export class App extends React.Component<object, object> {
+export default class App extends Component {
     constructor() {
         super();
         this.state = {
@@ -125,7 +128,7 @@ export class App extends React.Component<object, object> {
     setSelectedImage(imgData: string) {
         console.log('pressed', imgData);
     }
-    processImagePickerResponse(response: any) {
+    processImagePickerResponse(response) {
         console.log('Response = ', response);
 
         if (response.didCancel) {
@@ -148,17 +151,17 @@ export class App extends React.Component<object, object> {
     }
     loadCameraPhoto() {
         ImagePicker.launchCamera(
-            this.pickerOptions, (response: any) => this.processImagePickerResponse(response)
+            this.pickerOptions, (response) => this.processImagePickerResponse(response)
         );
     }
     loadLibraryPhoto() {
         ImagePicker.launchImageLibrary(
-            this.pickerOptions, (response: any) => this.processImagePickerResponse(response)
+            this.pickerOptions, (response) => this.processImagePickerResponse(response)
         );
     }
     showImagePicker() {
         ImagePicker.showImagePicker(
-            this.pickerOptions, (response: any) => this.processImagePickerResponse(response)
+            this.pickerOptions, (response) => this.processImagePickerResponse(response)
         );
     }
     processImage() {
@@ -381,5 +384,3 @@ export class App extends React.Component<object, object> {
         );
     }
 }
-
-AppRegistry.registerComponent('cgen', () => App);
