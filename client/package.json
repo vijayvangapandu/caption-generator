@@ -9,7 +9,8 @@
   "dependencies": {
     "immutable": "^3.8.2",
     "react": "16.0.0",
-    "react-native": "0.47",
+    "react-native": "0.51.0",
+    "react-native-drawer-layout-polyfill": "^2.0.0",
     "react-native-image-picker": "^0.26.7"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 export default  StyleSheet.create({
     container: {
         flex: 1,
@@ -145,7 +145,15 @@ export default  StyleSheet.create({
         fontSize: 18,
         marginBottom: 10,
         textAlign: 'right',
-        marginRight: 20
+        marginRight: 20,
+        ...Platform.select({
+            ios: {
+                marginTop: 10
+            },
+            android: {
+                marginTop: 0
+            }
+        })
     },
     loadingOverlay: {
         position: 'absolute',
@@ -161,5 +169,15 @@ export default  StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 200
+    },
+    heroContainer: {
+        ...Platform.select({
+            ios: {
+                marginTop: 60,
+            },
+            android: {
+                marginTop: 0,
+            },
+        }),
     }
 });

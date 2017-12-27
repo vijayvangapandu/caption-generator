@@ -1,13 +1,13 @@
 /**
- * comment generator application
- * https://github.com/facebook/react-native
+ * caption generator
  * @flow
  */
 
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import ImagePicker from 'react-native-image-picker';
-import  NavigationView  from './components/NavigationView.js';
+import NavigationView  from './components/NavigationView';
+import ImageView from './components/ImageView';
 import styles from './styles';
 import {
     Platform,
@@ -28,14 +28,6 @@ import {
     Modal
 } from 'react-native';
 require('./utils/network-logger.js')();
-// const icon = require('./assets/menu-icon.svg');
-
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 export default class App extends Component {
     constructor() {
@@ -53,7 +45,7 @@ export default class App extends Component {
             captionsLoading: false,
             selectedCaption: 0,
             modalVisible: false,
-            drawrOpen: false,
+            drawerOpen: false,
             store: []
         }
         this.pickerOptions = {
@@ -104,12 +96,6 @@ export default class App extends Component {
         //     console.log(error);
         // });
         this.asycnMultiGet();
-    }
-    componentDidMount() {
-        console.log('component did mount');
-    }
-    componentWillUnmount() {
-        console.log('component will unmount');
     }
     asyncStoreData = async () => {
         try {
@@ -240,8 +226,8 @@ export default class App extends Component {
         });
     }
     _onActionSelected = () => {
-        if (this.state.drawrOpen) {
-            this.refs['DRAWER'].closeDrawr();
+        if (this.state.drawerOpen) {
+            this.refs['DRAWER'].closeDrawer();
         }  else {
             this.refs['DRAWER'].openDrawer();
         }
@@ -253,8 +239,8 @@ export default class App extends Component {
                 drawerWidth={200}
                 drawerPosition={DrawerLayoutAndroid.positions.Left}
                 drawerBackgroundColor={'#841584'}
-                onDrawerOpen={(state) => this.setState({drawrOpen: true})}
-                onDrawerClose={(state) => this.setState({drawrOpen: false})}
+                onDrawerOpen={(state) => this.setState({drawerOpen: true})}
+                onDrawerClose={(state) => this.setState({drawerOpen: false})}
                 renderNavigationView={() => {
                     return <NavigationView
                                 setActiveItem={(item) => this.setActiveItem(item)}
@@ -285,35 +271,16 @@ export default class App extends Component {
                     </View>
                 </View>
             </Modal>
-            <View style={styles.heroContainer}>
-                <StatusBar backgroundColor="#841584" barStyle="light-content" />
-                <ToolbarAndroid
-                    style={styles.toolbarAndroid}
-                    titleColor="#fff"
-                    actions={[{title: 'Photos', show: 'always'}]}
-                    onActionSelected={() => this._onActionSelected()}
-                    title="cgen" />
-                    {this.state.image.data ?  (
-                        <View style={styles.imageView}>
-                            {this.state.appLoading && <View style={styles.loadingOverlay}>
-                            <ActivityIndicator size="large" color="#fff" />
-                            </View>}
-                            <Image
-                                style={styles.imageComponent}
-                                source={{uri: this.state.image.data}} />
-                        </View>
-                    ) : (
-                        <View style={styles.introView}>
-                            <View style={styles.introViewInner}>
-                                <Text style={styles.modalTitle}>caption generator</Text>
-                                <Text>1) choose an image</Text>
-                                <Text>2) process the image</Text>
-                                <Text>3) tap a caption to copy it</Text>
-                                <Text style={styles.modalText}>4) profit</Text>
-                            </View>
-                        </View>
-                    )}
-            </View>
+            <StatusBar backgroundColor="#841584" barStyle="light-content" />
+            <ToolbarAndroid
+                style={styles.toolbarAndroid}
+                titleColor="#fff"
+                actions={[{title: 'Photos', show: 'always'}]}
+                onActionSelected={() => this._onActionSelected()}
+                title="cgen" />
+            <ImageView
+                image={this.state.iamge}
+                loading={this.state.appLoading} />
             <View>
                     {!!this.state.labels && <View style={styles.labelView}>
                         {!!this.state.labels && this.state.labels.map((label, i) => (
