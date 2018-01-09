@@ -18,26 +18,34 @@ export default class CaptionView extends Component<{}> {
         super(props);
     }
     render () {
+        let {
+            labels,
+            generateCaptions,
+            selectedCaption,
+            captions,
+            captionsLoading,
+            onPressCaptionItem
+        } = this.props;
         return (
             <View>
-                {!!this.props.labels && <View style={styles.labelView}>
-                    {!!this.props.labels && this.props.labels.map((label, i) => (
+                {!!labels && <View style={styles.labelView}>
+                    {!!labels && labels.map((label, i) => (
                         <Text
                             key={i}
                             style={styles.labelText}
-                            onPress={() => this.props.generateCaptions(i)}
-                            style={[styles.labelText, this.props.selectedCaption === i ? styles.labelTextActive : null]}>
+                            onPress={() => generateCaptions(i)}
+                            style={[styles.labelText, selectedCaption === i ? styles.labelTextActive : null]}>
                         {label}
                         </Text>
                     ))}
                 </View>}
-                {!!this.props.captions.length && <View style={styles.captionView}>
-                    {!!this.props.captionsLoading ? (
+                {!!captions.length && <View style={[styles.captionView, captionsLoading ? styles.captionViewLoading : null]}>
+                    {!!captionsLoading ? (
                         <ActivityIndicator size="small" color="#841584" />
                     ) : (
                         <CarouselView
-                            captions={this.props.captions}
-                            onPressCaptionItem={(item) => this.props.onPressCaptionItem(item)} />
+                            captions={captions}
+                            onPressCaptionItem={(item) => onPressCaptionItem(item)} />
                     )}
                 </View>}
             </View>

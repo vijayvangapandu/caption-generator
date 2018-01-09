@@ -22,19 +22,19 @@ function getSubject(label) {
     return `${subjects[random(0,3)]} ${label}`;
 }
 
-module.exports = (req, res, next, label) => {
+module.exports = (label) => {
     return [
         {
             id: 0,
-            text: `${getPreticate()} ${getSubject(label)}`
+            text: `${getPreticate()} ${getSubject(label.toLowerCase())}`
         },
         {
             id: 1,
-            text: `${getPreticate()} ${getSubject(label)}`
+            text: `${getPreticate()} ${getSubject(label.toLowerCase())}`
         },
         {
             id: 2,
-            text: `${getPreticate()} ${getSubject(label)}`
+            text: `${getPreticate()} ${getSubject(label.toLowerCase())}`
         }
     ]
 }

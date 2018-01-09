@@ -150,7 +150,7 @@ export default class App extends Component {
     _setModalVisible(visible) {
         this.setState({modalVisible: visible});
     }
-    _setActiveItem = (item) => {
+    setActiveItem = (item) => {
         let image = {
             data: item.data,
             fileName: item.fileName,
@@ -194,24 +194,24 @@ export default class App extends Component {
                 onDrawerClose={(state) => this.setState({drawerOpen: false})}
                 renderNavigationView={() => {
                     return <NavigationView
-                                setActiveItem={(item) => this._setActiveItem(item)}
+                                setActiveItem={(item) => this.setActiveItem(item)}
                                 store={this.state.store}
                                 image={this.state.image} />
                 }}>
             <View style={styles.container}>
-                
+
                 <StatusBar backgroundColor="#841584" barStyle="light-content" />
-                
+
                 <ToolbarAndroid
                     style={styles.toolbarAndroid}
                     titleColor="#fff"
                     onActionSelected={() => this.onActionSelected()}
                     title="cgen" />
-                
+
                 <ImageView
                     image={this.state.image}
                     loading={this.state.appLoading} />
-                
+
                 <CaptionView
                     selectedCaption={this.state.selectedCaption}
                     labels={this.state.labels}
@@ -219,7 +219,7 @@ export default class App extends Component {
                     onPressCaptionItem={this.state.onPressCaptionItem}
                     captionsLoading={this.state.captionsLoading} />
 
-                <ToolBarView 
+                <ToolBarView
                     showImagePicker={this.showImagePicker}
                     processImage={this.processImage}
                     onActionSelected={this.onActionSelected} />
@@ -227,5 +227,5 @@ export default class App extends Component {
             </View>
             </DrawerLayoutAndroid>
         );
-    }
+    } 
 }

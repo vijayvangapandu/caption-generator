@@ -43,8 +43,7 @@ export default class App extends Component<{}> {
             store: require('./mock/mock_data.js')
         })
     }
-    _setActiveItem = (item) => {
-        console.log()
+    setActiveItem = (item) => {
         let image = {
             data: item.data,
             fileName: item.fileName,
@@ -53,7 +52,8 @@ export default class App extends Component<{}> {
         this.setState({
             image,
             captions: item.captions,
-            labels: item.labels
+            labels: item.labels,
+            selectedCaption: 0
         });
         this.forceUpdate();
     }
@@ -123,7 +123,7 @@ export default class App extends Component<{}> {
                 onDrawerClose={(state) => this.setState({drawerOpen: false})}
                 renderNavigationView={() => {
                     return <NavigationView
-                                setActiveItem={(item) => this._setActiveItem(item)}
+                                setActiveItem={(item) => this.setActiveItem(item)}
                                 store={this.state.store}
                                 image={this.state.image} />
             }}>
@@ -134,6 +134,7 @@ export default class App extends Component<{}> {
                 selectedCaption={this.state.selectedCaption}
                 labels={this.state.labels}
                 image={this.state.image}
+                captionsLoading={this.state.captionsLoading}
                 appLoading={this.state.appLoading}
                 generateCaptions={(index) => this.generateCaptions(index)}
                 onActionSelected={()=> this.onActionSelected()}

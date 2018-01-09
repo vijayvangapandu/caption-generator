@@ -129,6 +129,11 @@ export default  StyleSheet.create({
         paddingBottom: 10,
         paddingRight:10
     },
+    captionViewLoading: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 215
+    },
     caption: {
         marginBottom: 5,
         fontSize: 22,

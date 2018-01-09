@@ -131,11 +131,10 @@ app.post('/api/v1/process', function (req, res) {
 });
 
 app.post('/api/v1/captions', function (req, res) {
-        res.status(200).json({
-            captions: captions(req.body.label)
-        });
-    }
-);
+    res.status(200).json({
+        captions: captions(req.body.label)
+    });
+});
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/index.html'));
