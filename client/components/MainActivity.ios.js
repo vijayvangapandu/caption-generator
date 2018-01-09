@@ -6,6 +6,8 @@
 import React, { Component } from 'react';
 import ImagePicker from 'react-native-image-picker';
 import ImageView from './ImageView';
+import CaptionView from './CaptionView';
+import ToolBarView from './ToolBarView';
 import styles from '../styles.js';
 import {
     Platform,
@@ -14,30 +16,14 @@ import {
     View,
     Button,
     TabBarIOS,
-    NavigatorIOS,
-    AsyncStorage
+    ActivityIndicator,
+    FlatList
 } from 'react-native';
 require('../utils/network-logger.js')();
 
 export default class MainActivity extends Component<{}> {
     constructor(props) {
         super();
-        this.state = {
-            uri: null,
-            image: {
-                data: null,
-                fileName: null,
-                type: null
-            },
-            captions: [],
-            labels: [],
-            appLoading: false,
-            captionsLoading: false,
-            selectedCaption: 0,
-            modalVisible: false,
-            drawrOpen: false,
-            store: []
-        }
         this.pickerOptions = {
             title: 'Photo Picker',
             takePhotoButtonTitle: 'Take Photo...',
@@ -51,57 +37,6 @@ export default class MainActivity extends Component<{}> {
             }
         }
     }
-    asyncPurgeStore = async (key: string) => {
-        try {
-            await AsyncStorage.removeItem((key, error) => {
-                if (error) {
-                    console.warn('purge store error', error);
-                } else {
-                    this.forceUpdate();
-                }
-            })
-        } catch (error) {
-            console.warn('purge store error', error);
-        }
-    }
-    asycnMultiGet = async () => {
-        try {
-            await AsyncStorage.getAllKeys((error, keys) => {
-                AsyncStorage.multiGet(keys, (error, stores) => {
-                    store = stores.map((store) => {
-                        return JSON.parse(store[1])
-                    });
-                    this.setState({store});
-                });
-                if (keys.length >= 5) {
-                    this.asyncPurgeStore(keys[5]);
-                }
-            });
-        } catch (error) {
-            console.warn('async multi get error', error);
-        }
-    }
-    componentWillMount() {
-        // AsyncStorage.clear((error)=> {
-        //     console.log(error);
-        // });
-        this.asycnMultiGet();
-    }
-    asyncStoreData = async () => {
-        try {
-            await AsyncStorage.setItem(this.state.image.fileName, JSON.stringify({
-                timestamp: new Date().getTime(),
-                data: this.state.image.data,
-                fileName: this.state.image.fileName,
-                type: this.state.image.imagetype,
-                captions: this.state.captions,
-                labels: this.state.labels
-            }));
-        } catch (error) {
-            console.warn('error saving data', error);
-        }
-    }
-
     _loadCameraPhoto = () => {
         ImagePicker.launchCamera(
             this.pickerOptions, (response) =>
@@ -114,7 +49,7 @@ export default class MainActivity extends Component<{}> {
                 this.props.processImagePickerResponse(response)
         );
     }
-    _showImagePicker = () => {
+    showImagePicker = () => {
         ImagePicker.showImagePicker(
             this.pickerOptions, (response) =>
                 this.props.processImagePickerResponse(response)
@@ -126,38 +61,23 @@ export default class MainActivity extends Component<{}> {
             <View style={styles.container}>
 
                 <ImageView
-                    image={this.state.image}
-                    loading={this.state.appLoading} />
+                    image={this.props.image}
+                    loading={this.props.appLoading} />
 
-                <TabBarIOS
-                    tintColor={'#841584'}
-                    unselectedItemTintColor={'#000'}>
+                <CaptionView
+                    selectedCaption={this.props.selectedCaption}
+                    labels={this.props.labels}
+                    captions={this.props.captions}
+                    onPressCaptionItem={this.props.onPressCaptionItem}
+                    captionsLoading={this.props.captionsLoading}
+                    generateCaptions={(index) => this.props.generateCaptions(index)}
+                />
 
-                    <TabBarIOS.Item
-                        systemIcon={'most-recent'}
-                        selected={false}
-                        onPress={() => console.log('tab bar tap')}>
-                        <Text>library photos</Text>
-                    </TabBarIOS.Item>
-                    <TabBarIOS.Item
-                        systemIcon={'recents'}
-                        selected={false}
-                        onPress={() => console.log('tab bar tap')}>
-                        <Text>process image</Text>
-                    </TabBarIOS.Item>
-                    <TabBarIOS.Item
-                        systemIcon={'search'}
-                        selected={false}
-                        onPress={() => this._showImagePicker()}>
-                        <Text>show picker</Text>
-                    </TabBarIOS.Item>
-                    <TabBarIOS.Item
-                        systemIcon={'more'}
-                        selected={false}
-                        onPress={() => this.props.onActionSelected()}>
-                        <Text>camera</Text>
-                    </TabBarIOS.Item>
-                </TabBarIOS>
+                <ToolBarView
+                    showImagePicker={this.showImagePicker}
+                    processImage={this.processImage}
+                    onActionSelected={this.props.onActionSelected}
+                />
             </View>
         );
     }

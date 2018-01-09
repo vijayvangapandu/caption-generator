@@ -5,7 +5,12 @@
 
 import React, { Component } from 'react';
 import styles from '../styles';
-import { View, Text } from 'react-native';
+import {
+    View,
+    Text,
+    Image,
+    ActivityIndicator
+} from 'react-native';
 
 export default class ImageView extends Component<{}> {
     constructor(props) {

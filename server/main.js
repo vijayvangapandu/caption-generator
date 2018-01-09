@@ -4,14 +4,13 @@ var path = require('path');
 var http = require('http');
 var https = require('https');
 var express = require('express');
-var config = require('./config.js ');
+var config = require('./config.js');
 
 var AWS = require('aws-sdk');
 var Sentencer = require('sentencer');
 var uuidv1 = require('uuid/v1');
 var captions = require('./middleware/captions');
 var fetch = require('node-fetch');
-
 
 var app = express();
 var port = 3001;
@@ -28,8 +27,8 @@ app.use(function(req, res, next) {
 var s3 = new AWS.S3();
 var rekognition = new AWS.Rekognition({
     apiVersion: '2016-06-27',
-    accessKeyId: config.accessKey,
-    secretAccessKey: config.secretAccessKey,
+    accessKeyId: config.ACCESS_KEY,
+    secretAccessKey: config.SECRET_ACCESS_KEY,
     sslEnabled: true,
     region:'us-west-2',
     httpOptions: {
@@ -66,7 +65,7 @@ app.post('/api/v1/process', function (req, res) {
                 fs.readFile('./' + name, function (error, data) {
                     s3.putObject({Bucket: 'cgen-uploads', Key: name, Body: data}, function(error, data) {
                         if (error) {
-                            console.log('failed to put object in s3');
+                            console.log('failed to put object in s3', error);
                             reject();
                         } else {
                             console.log('put object in s3');

@@ -8,6 +8,8 @@ import { Map } from 'immutable';
 import ImagePicker from 'react-native-image-picker';
 import NavigationView  from './components/NavigationView';
 import ImageView from './components/ImageView';
+import CaptionView from './components/CaptionView';
+import ToolBarView from './components/ToolBarView';
 import styles from './styles';
 import {
     Platform,
@@ -61,59 +63,6 @@ export default class App extends Component {
             }
         }
     }
-    asyncPurgeStore = async (key: string) => {
-        try {
-            await AsyncStorage.removeItem((key, error) => {
-                if (error) {
-                    console.warn('purge store error', error);
-                } else {
-                    this.forceUpdate();
-                }
-            })
-        } catch (error) {
-            console.warn('purge store error', error);
-        }
-    }
-    asycnMultiGet = async () => {
-        try {
-            await AsyncStorage.getAllKeys((error, keys) => {
-                AsyncStorage.multiGet(keys, (error, stores) => {
-                    store = stores.map((store) => {
-                        return JSON.parse(store[1])
-                    });
-                    this.setState({store});
-                });
-                if (keys.length >= 5) {
-                    this.asyncPurgeStore(keys[5]);
-                }
-            });
-        } catch (error) {
-            console.warn('async multi get error', error);
-        }
-    }
-    componentWillMount() {
-        // AsyncStorage.clear((error)=> {
-        //     console.log(error);
-        // });
-        this.asycnMultiGet();
-    }
-    asyncStoreData = async () => {
-        try {
-            await AsyncStorage.setItem(this.state.image.fileName, JSON.stringify({
-                timestamp: new Date().getTime(),
-                data: this.state.image.data,
-                fileName: this.state.image.fileName,
-                type: this.state.image.imagetype,
-                captions: this.state.captions,
-                labels: this.state.labels
-            }));
-        } catch (error) {
-            console.warn('error saving data', error);
-        }
-    }
-    setSelectedImage(imgData: string) {
-        console.log('pressed', imgData);
-    }
     processImagePickerResponse(response) {
         console.log('Response = ', response);
 
@@ -152,7 +101,7 @@ export default class App extends Component {
     }
     processImage() {
         this.setState({appLoading:true});
-        fetch('http://192.168.0.7:3001/api/v1/process', {
+        fetch('http://192.168.0.5:3001/api/v1/process', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -170,9 +119,6 @@ export default class App extends Component {
                 appLoading:false,
                 captions: json.captions,
                 labels: json.labels
-            }, () => {
-                this.asyncStoreData()
-                    .then(() => this.asycnMultiGet());
             });
         })
         .catch((error)=> console.warn('network error', error));
@@ -182,7 +128,7 @@ export default class App extends Component {
             captionsLoading: true,
             selectedCaption: index
         });
-        fetch('http://192.168.0.7:3001/api/v1/captions', {
+        fetch('http://192.168.0.5:3001/api/v1/captions', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -204,7 +150,7 @@ export default class App extends Component {
     _setModalVisible(visible) {
         this.setState({modalVisible: visible});
     }
-    setActiveItem = (item) => {
+    _setActiveItem = (item) => {
         let image = {
             data: item.data,
             fileName: item.fileName,
@@ -217,7 +163,7 @@ export default class App extends Component {
             labels: item.labels
         });
     }
-    _onPressCaptionItem(id) {
+    onPressCaptionItem(id) {
         this.state.captions.forEach((item) => {
             if (id === item.id) {
                 Clipboard.setString(this.state.captions[id].text);
@@ -225,12 +171,17 @@ export default class App extends Component {
             }
         });
     }
-    _onActionSelected = () => {
+    onActionSelected = () => {
         if (this.state.drawerOpen) {
             this.refs['DRAWER'].closeDrawer();
         }  else {
             this.refs['DRAWER'].openDrawer();
         }
+    }
+    componentWillMount() {
+        this.setState({
+            store: require('./mock/mock_data.js')
+        })
     }
     render() {
         return (
@@ -243,109 +194,36 @@ export default class App extends Component {
                 onDrawerClose={(state) => this.setState({drawerOpen: false})}
                 renderNavigationView={() => {
                     return <NavigationView
-                                setActiveItem={(item) => this.setActiveItem(item)}
+                                setActiveItem={(item) => this._setActiveItem(item)}
                                 store={this.state.store}
                                 image={this.state.image} />
                 }}>
             <View style={styles.container}>
-            <Modal
-                animationType={"slide"}
-                transparent={true}
-                visible={this.state.modalVisible}
-                onRequestClose={() => {alert("Modal has been closed.")}}>
-                <View style={styles.modalView}>
-                    <View style={styles.modalViewInner}>
-                        <View>
-                            <Text style={styles.modalTitle}>caption generator</Text>
-                            <Text>1) choose an image</Text>
-                            <Text>2) process the image</Text>
-                            <Text>3) tap a caption to copy it</Text>
-                            <Text style={styles.modalText}>4) profit</Text>
-                            <Button
-                                onPress={() => this.setModalVisible(!this.state.modalVisible)}
-                                style={[styles.button]}
-                                title="Got It!"
-                                color="#841584"
-                                accessibilityLabel="close modal" />
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-            <StatusBar backgroundColor="#841584" barStyle="light-content" />
-            <ToolbarAndroid
-                style={styles.toolbarAndroid}
-                titleColor="#fff"
-                actions={[{title: 'Photos', show: 'always'}]}
-                onActionSelected={() => this._onActionSelected()}
-                title="cgen" />
-            <ImageView
-                image={this.state.iamge}
-                loading={this.state.appLoading} />
-            <View>
-                    {!!this.state.labels && <View style={styles.labelView}>
-                        {!!this.state.labels && this.state.labels.map((label, i) => (
-                            <Text
-                                key={i}
-                                style={styles.labelText}
-                                onPress={() => this.generateCaptions(i)}
-                                style={[styles.labelText, this.state.selectedCaption === i ? styles.labelTextActive : null]}>
-                            {label}
-                            </Text>
-                        ))}
-                    </View>}
-                    {!!this.state.captions.length && <View style={styles.captionView}>
-                        {!!this.state.captionsLoading ? (
-                            <ActivityIndicator size="small" color="#841584" />
-                        ) : (
-                            <FlatList
-                                data={this.state.captions}
-                                extraData={this.state}
-                                keyExtractor={(item) => item.id}
-                                onPressItem={(item) => this._onPressCaptionItem(item.id)}
-                                renderItem={({item}) => (
-                                    <Text
-                                        onPress={() => this._onPressCaptionItem(item.id)}
-                                        style={styles.caption}>{item.text}</Text>
-                            )} />
-                        )}
-                    </View>}
-            </View>
-                <View style={styles.toolbarView}>
-                    <View style={styles.row}>
-                        <Button
-                            style={styles.button}
-                            _onPress={() => this.setModalVisible(true)}
-                            title="Show Modal"
-                            color="#841584"
-                            accessibilityLabel="show modal dialog" />
-                        <Button
-                            style={styles.button}
-                            onPress={() => this.loadLibraryPhoto()}
-                            title="Library Photos"
-                            color="#841584"
-                            accessibilityLabel="load photos from library" />
-                    </View>
-                    <View style={styles.row}>
-                        <Button
-                            style={styles.button}
-                            onPress={() => this.loadCameraPhoto()}
-                            title="Camera Photos"
-                            color="#841584"
-                            accessibilityLabel="load photos from camera" />
-                        <Button
-                            style={styles.button}
-                            onPress={() => this.showImagePicker()}
-                            title="Show Picker"
-                            color="#841584"
-                            accessibilityLabel="show image picker" />
-                        <Button
-                            style={styles.button}
-                            onPress={() => this.processImage()}
-                            title="Process Image"
-                            color="#841584"
-                            accessibilityLabel="process current image" />
-                    </View>
-                </View>
+                
+                <StatusBar backgroundColor="#841584" barStyle="light-content" />
+                
+                <ToolbarAndroid
+                    style={styles.toolbarAndroid}
+                    titleColor="#fff"
+                    onActionSelected={() => this.onActionSelected()}
+                    title="cgen" />
+                
+                <ImageView
+                    image={this.state.image}
+                    loading={this.state.appLoading} />
+                
+                <CaptionView
+                    selectedCaption={this.state.selectedCaption}
+                    labels={this.state.labels}
+                    captions={this.state.captions}
+                    onPressCaptionItem={this.state.onPressCaptionItem}
+                    captionsLoading={this.state.captionsLoading} />
+
+                <ToolBarView 
+                    showImagePicker={this.showImagePicker}
+                    processImage={this.processImage}
+                    onActionSelected={this.onActionSelected} />
+
             </View>
             </DrawerLayoutAndroid>
         );

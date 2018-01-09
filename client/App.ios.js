@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import ImagePicker from 'react-native-image-picker';
 import MainActivity from './components/MainActivity';
 import NavigationView  from './components/NavigationView';
+import HeaderView from './components/HeaderView';
 import DrawerLayout from 'react-native-drawer-layout-polyfill';
 import styles from './styles';
 import {
@@ -37,6 +38,25 @@ export default class App extends Component<{}> {
             store: []
         }
     }
+    componentWillMount() {
+        this.setState({
+            store: require('./mock/mock_data.js')
+        })
+    }
+    _setActiveItem = (item) => {
+        console.log()
+        let image = {
+            data: item.data,
+            fileName: item.fileName,
+            type: 'img/jpg'
+        };
+        this.setState({
+            image,
+            captions: item.captions,
+            labels: item.labels
+        });
+        this.forceUpdate();
+    }
     processImagePickerResponse(response) {
         console.log('Response = ', response);
 
@@ -58,12 +78,39 @@ export default class App extends Component<{}> {
             this.setState({image});
         }
     }
+    generateCaptions(index) {
+        this.setState({
+            captionsLoading: true,
+            selectedCaption: index
+        });
+        fetch('http://192.168.0.5:3001/api/v1/captions', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                label: this.state.labels[index]
+            })
+        })
+        .then((raw) => raw.json())
+        .then((response) => {
+            this.setState({
+                captionsLoading: false,
+                captions: response.captions
+            });
+        })
+        .catch((error)=> console.warn('network error', error));
+    }
     onActionSelected = () => {
         if (this.state.drawerOpen) {
             this.refs['DRAWER'].closeDrawer();
         }  else {
             this.refs['DRAWER'].openDrawer();
         }
+    }
+    onPressCaptionItem = (item) => {
+        console.log('caption pressed', item);
     }
     render() {
         return (
@@ -76,26 +123,22 @@ export default class App extends Component<{}> {
                 onDrawerClose={(state) => this.setState({drawerOpen: false})}
                 renderNavigationView={() => {
                     return <NavigationView
-                                setActiveItem={(item) => this.setActiveItem(item)}
+                                setActiveItem={(item) => this._setActiveItem(item)}
                                 store={this.state.store}
                                 image={this.state.image} />
             }}>
             <StatusBar backgroundColor={"#841584"} barStyle={"light-content"} />
-            <NavigatorIOS
-                initialRoute={{
-                    component: () => {
-                        return <MainActivity
-                            onActionSelected={()=> this.onActionSelected()}
-                            processImagePickerResponse = {(response) =>
-                                this.processImagePickerResponse(response)
-                            }
-                        />
-                    },
-                    barTintColor: '#841584',
-                    title: 'cgen'
-                }}
-                style={{flex: 1}}
-            />
+            <HeaderView />
+            <MainActivity
+                captions={this.state.captions}
+                selectedCaption={this.state.selectedCaption}
+                labels={this.state.labels}
+                image={this.state.image}
+                appLoading={this.state.appLoading}
+                generateCaptions={(index) => this.generateCaptions(index)}
+                onActionSelected={()=> this.onActionSelected()}
+                processImagePickerResponse = {(response) => this.processImagePickerResponse(response)}
+                onPressCaptionItem={(item) => this.onPressCaptionItem(item)} />
             </DrawerLayout>
         );
     }

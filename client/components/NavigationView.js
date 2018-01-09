@@ -21,7 +21,7 @@ export default class NavigationView extends Component {
                 <FlatList
                     data={this.props.store}
                     extraData={this.props}
-                    keyExtractor={(item) => item.filename}
+                    keyExtractor={(item) => item.fileName}
                     renderItem={(result) => {
                         return <NavigationItem
                                     result={result}

@@ -97,36 +97,58 @@ export default  StyleSheet.create({
     },
     labelText: {
         backgroundColor: '#fff',
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
+
         borderWidth: 3,
         borderColor: '#841584',
         color: '#841584',
-        paddingLeft: 13,
-        paddingRight: 5,
-        paddingTop: 7,
-        paddingBottom: 3,
         marginHorizontal: 5,
-        marginBottom: 8
+        marginBottom: 8,
+        ...Platform.select({
+            ios: {
+                borderRadius:10,
+                padding: 5
+            },
+            android: {
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                borderBottomRightRadius: 10,
+                paddingLeft: 13,
+                paddingRight: 5,
+                paddingTop: 7,
+                paddingBottom: 3,
+            }
+        })
+    },
+    labelTextActive: {
+        borderColor: '#a4c639',
+        color: '#a4c639',
     },
     captionView: {
         flexDirection: 'column',
         alignItems: 'flex-start',
         paddingBottom: 10,
-        transform: [{translateX: 10}]
+        paddingRight:10
     },
     caption: {
         marginBottom: 5,
-        fontSize: 16
+        fontSize: 22,
     },
     button: {
         height: 150
     },
     toolbarView: {
         marginTop: 'auto',
-        marginBottom: 10,
-        flex:0
+        paddingTop: 5,
+        marginBottom: 0,
+        flex:0,
+        paddingTop: 15,
+        paddingBottom: 8,
+        backgroundColor: '#841584'
+    },
+    toolBarText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16
     },
     row: {
         justifyContent: 'space-around',
@@ -171,13 +193,26 @@ export default  StyleSheet.create({
         height: 200
     },
     heroContainer: {
-        ...Platform.select({
-            ios: {
-                marginTop: 60,
-            },
-            android: {
-                marginTop: 0,
-            },
-        }),
+        marginTop: 0
+    },
+    headerView: {
+        backgroundColor: '#841584',
+        paddingTop: 30,
+        paddingBottom: 15,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    headerText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+    carouselView: {
+        paddingTop: 15
+    },
+    carouselSlide: {
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
     }
 });
