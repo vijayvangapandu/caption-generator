@@ -6,6 +6,7 @@
 import React, { Component } from 'react';
 import CarouselView from './CarouselView';
 import styles from '../styles';
+import c from '../constants';
 import {
     View,
     Text,
@@ -33,7 +34,7 @@ export default class CaptionView extends Component<{}> {
                         <Text
                             key={i}
                             style={styles.labelText}
-                            onPress={() => generateCaptions(i)}
+                            onPress={() => this.props.generateCaptions(i)}
                             style={[styles.labelText, selectedCaption === i ? styles.labelTextActive : null]}>
                         {label}
                         </Text>
@@ -41,7 +42,7 @@ export default class CaptionView extends Component<{}> {
                 </View>}
                 {!!captions.length && <View style={[styles.captionView, captionsLoading ? styles.captionViewLoading : null]}>
                     {!!captionsLoading ? (
-                        <ActivityIndicator size="small" color="#841584" />
+                        <ActivityIndicator size="small" color={c.PURPLE} />
                     ) : (
                         <CarouselView
                             captions={captions}

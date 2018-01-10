@@ -11,7 +11,6 @@ import {
     Image,
     ActivityIndicator
 } from 'react-native';
-
 export default class ImageView extends Component<{}> {
     constructor(props) {
         super();

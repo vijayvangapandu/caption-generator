@@ -1,22 +1,23 @@
 import { StyleSheet, Platform } from 'react-native';
+import c from './constants';
 export default  StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: c.WHITE,
     },
     toolbarAndroid: {
         height: 50,
-        backgroundColor: '#841584'
+        backgroundColor: c.PURPLE
     },
     storeView: {
         flexDirection: 'column',
-        backgroundColor: '#841584'
+        backgroundColor: c.PURPLE
     },
     storeViewCell: {
         padding: 5,
         width: '100%',
         alignItems: 'center',
-        backgroundColor: '#841584',
+        backgroundColor: c.PURPLE,
     },
     storeViewLoadingCell: {
         width: '100%',
@@ -30,14 +31,14 @@ export default  StyleSheet.create({
         borderWidth: 1
     },
     storeViewText: {
-        color: '#fff',
+        color: c.WHITE,
         fontSize: 12,
-        backgroundColor: '#841584',
+        backgroundColor: c.PURPLE,
         fontWeight: 'bold',
         marginTop: 3
     },
     storeViewCellActive: {
-        backgroundColor: '#a4c639'
+        backgroundColor: c.GREEN
     },
     introView: {
         justifyContent: 'center',
@@ -51,7 +52,7 @@ export default  StyleSheet.create({
         paddingBottom: 0,
         borderWidth: 3,
         borderRadius: 3,
-        borderColor: '#841584',
+        borderColor: c.PURPLE,
         marginTop: 50
     },
     modalTitle: {
@@ -81,12 +82,12 @@ export default  StyleSheet.create({
         flex: 1
     },
     modalViewInner: {
-        backgroundColor: '#fff',
+        backgroundColor: c.WHITE,
         width: 300,
         padding: 15,
         borderWidth: 3,
         borderRadius: 3,
-        borderColor: '#841584',
+        borderColor: c.PURPLE,
         flex: -1
     },
     labelView: {
@@ -96,11 +97,11 @@ export default  StyleSheet.create({
         marginTop: 10
     },
     labelText: {
-        backgroundColor: '#fff',
+        backgroundColor: c.WHITE,
 
         borderWidth: 3,
-        borderColor: '#841584',
-        color: '#841584',
+        borderColor: c.PURPLE,
+        color: c.PURPLE,
         marginHorizontal: 5,
         marginBottom: 8,
         ...Platform.select({
@@ -120,8 +121,8 @@ export default  StyleSheet.create({
         })
     },
     labelTextActive: {
-        borderColor: '#a4c639',
-        color: '#a4c639',
+        borderColor: c.GREEN,
+        color: c.GREEN,
     },
     captionView: {
         flexDirection: 'column',
@@ -148,7 +149,7 @@ export default  StyleSheet.create({
         flex:0,
         paddingTop: 15,
         paddingBottom: 8,
-        backgroundColor: '#841584'
+        backgroundColor: c.PURPLE
     },
     toolBarText: {
         color: 'white',
@@ -167,7 +168,7 @@ export default  StyleSheet.create({
         paddingBottom: 90
     },
     navigationViewTitle: {
-        color: '#fff',
+        color: c.WHITE,
         fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 10,
@@ -201,14 +202,14 @@ export default  StyleSheet.create({
         marginTop: 0
     },
     headerView: {
-        backgroundColor: '#841584',
+        backgroundColor: c.PURPLE,
         paddingTop: 30,
         paddingBottom: 15,
         justifyContent: 'center',
         alignItems: 'center'
     },
     headerText: {
-        color: '#fff',
+        color: c.WHITE,
         fontWeight: 'bold',
         fontSize: 18
     },
