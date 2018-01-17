@@ -1,5 +1,5 @@
 /**
- * MainActivity component
+ * HeaderView component
  * @flow
  */
 

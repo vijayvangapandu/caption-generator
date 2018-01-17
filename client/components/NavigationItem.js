@@ -1,3 +1,8 @@
+/**
+ * NavigationItem component
+ * @flow
+ */
+
 import React, { Component } from 'react';
 import styles from '../styles';
 import {

@@ -1,5 +1,5 @@
 /**
- * MainActivity component
+ * CaptionView component
  * @flow
  */
 

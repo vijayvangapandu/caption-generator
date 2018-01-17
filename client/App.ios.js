@@ -36,8 +36,11 @@ export default class App extends Component<{}> {
                                     store={state.store}
                                     image={state.image} />
                 }}>
-                <StatusBar backgroundColor={"#841584"} barStyle={"light-content"} />
+
+                <StatusBar backgroundColor={c.PURPLE} barStyle={"light-content"} />
+
                 <HeaderView />
+
                 <MainActivity
                     captions={state.captions}
                     selectedCaption={state.selectedCaption}

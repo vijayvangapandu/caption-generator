@@ -19,7 +19,6 @@ import {
     ActivityIndicator,
     FlatList
 } from 'react-native';
-require('../utils/network-logger.js')();
 
 export default class MainActivity extends Component<{}> {
     render() {
@@ -36,15 +35,13 @@ export default class MainActivity extends Component<{}> {
                     captions={this.props.captions}
                     onPressCaptionItem={this.props.onPressCaptionItem}
                     captionsLoading={this.props.captionsLoading}
-                    generateCaptions={(index) => this.props.generateCaptions(index)}
-                />
+                    generateCaptions={(index) => this.props.generateCaptions(index)} />
 
                 <ToolBarView
                     showImagePicker={this.props.showImagePicker}
                     processImage={this.props.processImage}
                     onActionSelected={this.props.onActionSelected}
-                    loadCameraPhoto={this.props.loadCameraPhoto}
-                />
+                    loadCameraPhoto={this.props.loadCameraPhoto} />
             </View>
         );
     }

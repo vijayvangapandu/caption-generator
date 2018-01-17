@@ -1,5 +1,5 @@
 /**
- * MainActivity component
+ * Carousel component
  * @flow
  */
 

@@ -1,3 +1,8 @@
+/**
+ * NavigationView component
+ * @flow
+ */
+
 import React, { Component } from 'react';
 import NavigationItem from './NavigationItem.js';
 import styles from '../styles';

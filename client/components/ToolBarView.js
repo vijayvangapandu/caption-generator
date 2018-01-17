@@ -1,5 +1,5 @@
 /**
- * MainActivity component
+ * ToolBar component
  * @flow
  */
 

@@ -7,30 +7,16 @@ import React, { Component } from 'react';
 import ApplicationContainer from './containers/ApplicationContainer';
 import ImagePicker from 'react-native-image-picker';
 import NavigationView  from './components/NavigationView';
-import ImageView from './components/ImageView';
-import CaptionView from './components/CaptionView';
-import ToolBarView from './components/ToolBarView';
+import MainActivity from './components/MainActivity';
 import styles from './styles';
 import c from './constants';
 import {
-    Platform,
-    StyleSheet,
     Text,
     View,
-    Button,
-    Image,
-    AsyncStorage,
-    FlatList,
-    Clipboard,
-    ToastAndroid,
     StatusBar,
     ToolbarAndroid,
-    ActivityIndicator,
-    TouchableHighlight,
-    DrawerLayoutAndroid,
-    Modal
+    DrawerLayoutAndroid
 } from 'react-native';
-require('./utils/network-logger.js')();
 
 export default class App extends Component {
     render() {
@@ -43,12 +29,12 @@ export default class App extends Component {
                     drawerBackgroundColor={c.PURPLE}
                     onDrawerOpen={() => actions.onDrawerOpen()}
                     onDrawerClose={() => actions.onDrawerClose()}
-                    renderNavigationView={() => {
-                        return <NavigationView
-                                    setActiveItem={(item) => actions.setActiveItem(item)}
-                                    store={state.store}
-                                    image={state.image} />
-                    }}>
+                    renderNavigationView={() => (
+                        <NavigationView
+                            setActiveItem={(item) => actions.setActiveItem(item)}
+                            store={state.store}
+                            image={state.image} />
+                    )}>
                     <View style={styles.container}>
 
                         <StatusBar backgroundColor={c.PURPLE} barStyle="light-content" />
@@ -59,23 +45,19 @@ export default class App extends Component {
                             onActionSelected={() => actions.onActionSelected()}
                             title="cgen" />
 
-                        <ImageView
-                            image={state.image}
-                            loading={state.appLoading} />
-
-                        <CaptionView
+                        <MainActivity
+                            captions={state.captions}
                             selectedCaption={state.selectedCaption}
                             labels={state.labels}
-                            captions={state.captions}
+                            image={state.image}
                             captionsLoading={state.captionsLoading}
-                            onPressCaptionItem={() => actions.onPressCaptionItem()}
-                            generateCaptions={(index) => actions.generateCaptions(index)}
-                        />
-
-                        <ToolBarView
+                            appLoading={state.appLoading}
                             showImagePicker={() => actions.showImagePicker()}
-                            processImage={() => actions.processImage()}
-                            onActionSelected={() => actions.onActionSelected()} />
+                            generateCaptions={(index) => actions.generateCaptions(index)}
+                            onActionSelected={()=> actions.onActionSelected()}
+                            onPressCaptionItem={(item) => actions.onPressCaptionItem(item)}
+                            processImage={()=> actions.processImage()}
+                            loadCameraPhoto={()=> actions.loadCameraPhoto()} />
 
                     </View>
                 </DrawerLayoutAndroid>
