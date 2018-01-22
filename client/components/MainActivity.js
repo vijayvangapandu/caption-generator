@@ -39,7 +39,7 @@ export default class MainActivity extends Component<{}> {
 
                 <ToolBarView
                     showImagePicker={this.props.showImagePicker}
-                    processImage={this.props.processImage}
+                    copyText={this.props.copyText}
                     onActionSelected={this.props.onActionSelected}
                     loadCameraPhoto={this.props.loadCameraPhoto} />
             </View>

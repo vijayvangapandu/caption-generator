@@ -90,55 +90,6 @@ export default  StyleSheet.create({
         borderColor: c.PURPLE,
         flex: -1
     },
-    labelView: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-        marginTop: 10
-    },
-    labelText: {
-        backgroundColor: c.WHITE,
-
-        borderWidth: 3,
-        borderColor: c.PURPLE,
-        color: c.PURPLE,
-        marginHorizontal: 5,
-        marginBottom: 8,
-        ...Platform.select({
-            ios: {
-                borderRadius:10,
-                padding: 5
-            },
-            android: {
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                paddingLeft: 13,
-                paddingRight: 5,
-                paddingTop: 7,
-                paddingBottom: 3,
-            }
-        })
-    },
-    labelTextActive: {
-        borderColor: c.GREEN,
-        color: c.GREEN,
-    },
-    captionView: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        paddingBottom: 10,
-        paddingRight:10
-    },
-    captionViewLoading: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 215
-    },
-    caption: {
-        marginBottom: 5,
-        fontSize: 22,
-    },
     button: {
         height: 150
     },
@@ -212,13 +163,5 @@ export default  StyleSheet.create({
         color: c.WHITE,
         fontWeight: 'bold',
         fontSize: 18
-    },
-    carouselView: {
-        paddingTop: 15
-    },
-    carouselSlide: {
-        alignItems: 'center',
-        paddingLeft: 10,
-        paddingRight: 10
     }
 });

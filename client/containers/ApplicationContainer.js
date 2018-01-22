@@ -4,7 +4,6 @@
  */
 
 import React, { Component } from 'react';
-// import * as firebase from 'firebase';
 import { Map } from 'immutable';
 import ImagePicker from 'react-native-image-picker';
 require('../utils/network-logger.js')();
@@ -43,7 +42,7 @@ export default class ApplicationContainer extends Component {
     componentWillMount() {
         this.setState({
             store: require('../mock/mock_data.js')
-        })
+        });
     }
     processImagePickerResponse(response) {
         console.log('Response = ', response);
@@ -63,7 +62,7 @@ export default class ApplicationContainer extends Component {
                 fileName: response.fileName,
                 data: `data:image/jpeg;base64,${response.data}`
             };
-            this.setState({image});
+            this.processImage(image);
         }
     }
     loadCameraPhoto = () => {
@@ -98,9 +97,12 @@ export default class ApplicationContainer extends Component {
         });
         this.forceUpdate();
     }
-    processImage = () => {
-        this.setState({appLoading:true});
-        fetch('http://192.168.0.5:3001/api/v1/process', {
+    processImage = (image) => {
+        this.setState({
+            image,
+            appLoading:true
+        });
+        return fetch('http://localhost:3001/api/v1/process-image', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -120,14 +122,16 @@ export default class ApplicationContainer extends Component {
                 labels: json.labels
             });
         })
-        .catch((error)=> console.warn('network error', error));
+        .catch((error)=> {
+            console.warn('network error', error)
+        });
     }
     generateCaptions = (index) => {
         this.setState({
             captionsLoading: true,
             selectedCaption: index
         });
-        fetch('http://192.168.0.5:3001/api/v1/captions', {
+        fetch('http://localhost:3001/api/v1/generate-captions', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -138,13 +142,16 @@ export default class ApplicationContainer extends Component {
             })
         })
         .then((raw) => raw.json())
-        .then((response) => {
+        .then((captions) => {
             this.setState({
                 captionsLoading: false,
-                captions: response.captions
+                captions
             });
         })
         .catch((error)=> console.warn('network error', error));
+    }
+    copyText = () => {
+        console.log('tapped');
     }
     onActionSelected = () => {
         if (this.state.drawerOpen) {
@@ -173,7 +180,7 @@ export default class ApplicationContainer extends Component {
                 setActiveItem: this.setActiveItem,
                 showImagePicker: this.showImagePicker,
                 loadCameraPhoto: this.loadCameraPhoto,
-                processImage: this.processImage,
+                copyText: this.copyText,
                 onPressCaptionItem: this.onPressCaptionItem
             }
         );

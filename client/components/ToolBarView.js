@@ -26,8 +26,8 @@ export default class ToolBarView extends Component<{}> {
                     <TouchableOpacity onPress={() => this.props.showImagePicker()}>
                         <Text style={styles.toolBarText}>Pick</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.processImage()}>
-                        <Text style={styles.toolBarText}>Process</Text>
+                    <TouchableOpacity onPress={() => this.props.copyText()}>
+                        <Text style={styles.toolBarText}>Copy</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.onActionSelected()}>
                         <Text style={styles.toolBarText}>Recent</Text>

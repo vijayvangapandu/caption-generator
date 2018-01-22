@@ -5,16 +5,19 @@
 
 import React, { Component } from 'react';
 import Carousel from 'react-native-snap-carousel';
-import styles from '../styles';
-import { View, Text, Dimensions } from 'react-native';
+import {
+    View,
+    Text,
+    Dimensions,
+    StyleSheet,
+} from 'react-native';
 
 export default class CarouselView extends Component<{}> {
     constructor(props) {
         super(props);
         this.state = {
             viewport: {
-                width: Dimensions.get('window').width,
-                height: Dimensions.get('window').height
+                width: Dimensions.get('window').width
             }
         };
     }
@@ -25,8 +28,7 @@ export default class CarouselView extends Component<{}> {
                 onLayout={() => {
                     this.setState({
                         viewport: {
-                            width: Dimensions.get('window').width,
-                            height: Dimensions.get('window').height
+                            width: Dimensions.get('window').width
                         }
                     });
                 }}>
@@ -46,3 +48,18 @@ export default class CarouselView extends Component<{}> {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    carouselView: {
+        paddingTop: 15
+    },
+    carouselSlide: {
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    caption: {
+        marginBottom: 5,
+        fontSize: 22,
+    },
+});

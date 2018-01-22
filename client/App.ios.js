@@ -52,7 +52,7 @@ export default class App extends Component<{}> {
                     generateCaptions={(index) => actions.generateCaptions(index)}
                     onActionSelected={()=> actions.onActionSelected()}
                     onPressCaptionItem={(item) => actions.onPressCaptionItem(item)}
-                    processImage={()=> actions.processImage()}
+                    copyText={()=> actions.copyText()}
                     loadCameraPhoto={()=> actions.loadCameraPhoto()} />
                 </DrawerLayout>
             )}/>
